@@ -23,6 +23,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation("org.projectlombok:lombok:0.11.0")
+    implementation("org.hibernate:hibernate-gradle-plugin:5.6.15.Final")
+    implementation("org.postgresql:postgresql:42.7.13")
 }
 
 tasks.named('test') {
