@@ -1,12 +1,16 @@
 package com.spb.studentportalbackend.controller;
 
 import com.spb.studentportalbackend.dto.auth.request.LoginRequest;
+import com.spb.studentportalbackend.dto.auth.request.RegisterRequest;
 import com.spb.studentportalbackend.dto.auth.response.LoginResponse;
+import com.spb.studentportalbackend.dto.auth.response.RegisterResponse;
 import com.spb.studentportalbackend.service.auth.LoginService;
+import com.spb.studentportalbackend.service.auth.RegisterService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +24,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     LoginService loginService;
+    RegisterService registerService;
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(registerService.registerFirstAdmin(request));
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
