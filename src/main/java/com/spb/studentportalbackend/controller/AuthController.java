@@ -26,6 +26,7 @@ public class AuthController {
     LoginService loginService;
     RegisterService registerService;
 
+    // This is only used to add admin for the first time
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(registerService.registerFirstAdmin(request));
