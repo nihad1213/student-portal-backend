@@ -16,7 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @AllArgsConstructor
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CreateUserService {
     UserRepository userRepository;
