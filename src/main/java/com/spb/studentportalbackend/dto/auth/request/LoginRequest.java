@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginRequest {
-
     @NotBlank
     String username;
 
