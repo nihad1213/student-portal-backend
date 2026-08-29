@@ -22,7 +22,6 @@ public class CreateUserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
-
     public CreateUserResponse create(CreateUserRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
