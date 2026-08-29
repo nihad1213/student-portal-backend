@@ -1,4 +1,4 @@
-package com.spb.studentportalbackend.controller;
+package com.spb.studentportalbackend.controller.v1;
 
 import com.spb.studentportalbackend.dto.auth.request.LoginRequest;
 import com.spb.studentportalbackend.dto.auth.request.RegisterRequest;
