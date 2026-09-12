@@ -1,8 +1,8 @@
 package com.spb.studentportalbackend.service.user;
 
 import com.spb.studentportalbackend.common.RoleEnum;
-import com.spb.studentportalbackend.dto.common.response.CreateRecordResponse;
 import com.spb.studentportalbackend.dto.user.request.CreateUserRequest;
+import com.spb.studentportalbackend.dto.user.response.CreateUserResponse;
 import com.spb.studentportalbackend.entity.User;
 import com.spb.studentportalbackend.repository.UserRepository;
 import lombok.AccessLevel;
@@ -20,7 +20,7 @@ public class CreateUserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
-    public CreateRecordResponse create(CreateUserRequest request) {
+    public CreateUserResponse create(CreateUserRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
@@ -45,9 +45,16 @@ public class CreateUserService {
         }
         user.setRole(role);
 
-        userRepository.save(user);
+        User saved = userRepository.save(user);
 
-        return new CreateRecordResponse("Data created successfully!");
-
+        return new CreateUserResponse(
+                saved.getId(),
+                saved.getUsername(),
+                saved.getFirstName(),
+                saved.getLastName(),
+                saved.getPhoneNumber(),
+                saved.getMail(),
+                saved.getRole()
+        );
     }
 }
