@@ -2,12 +2,10 @@ package com.spb.studentportalbackend.service.user;
 
 import com.spb.studentportalbackend.common.RoleEnum;
 import com.spb.studentportalbackend.dto.user.request.CreateUserRequest;
-import com.spb.studentportalbackend.dto.user.response.CreateUserResponse;
 import com.spb.studentportalbackend.entity.User;
 import com.spb.studentportalbackend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;

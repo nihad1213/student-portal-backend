@@ -1,7 +1,7 @@
 package com.spb.studentportalbackend.controller.v1;
 
+import com.spb.studentportalbackend.dto.common.response.CreateRecordResponse;
 import com.spb.studentportalbackend.dto.user.request.CreateUserRequest;
-import com.spb.studentportalbackend.dto.user.response.CreateUserResponse;
 import com.spb.studentportalbackend.service.user.CreateUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserController {
     CreateUserService  createUserService;
 
     @PostMapping("/create")
-    public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<CreateRecordResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(createUserService.create(createUserRequest));
     }
 }
