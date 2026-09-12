@@ -1,6 +1,7 @@
 package com.spb.studentportalbackend.service.user;
 
 import com.spb.studentportalbackend.common.RoleEnum;
+import com.spb.studentportalbackend.dto.common.response.CreateRecordResponse;
 import com.spb.studentportalbackend.dto.user.request.CreateUserRequest;
 import com.spb.studentportalbackend.entity.User;
 import com.spb.studentportalbackend.repository.UserRepository;
@@ -19,7 +20,7 @@ public class CreateUserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
-    public CreateUserResponse create(CreateUserRequest request) {
+    public CreateRecordResponse create(CreateUserRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
@@ -44,9 +45,9 @@ public class CreateUserService {
         }
         user.setRole(role);
 
-        User saved = userRepository.save(user);
+        userRepository.save(user);
 
-        return new CreateUserResponse(saved.getId(), saved.getUsername(), saved.getMail(), saved.getRole());
+        return new CreateRecordResponse("Data created successfully!");
 
     }
 }
