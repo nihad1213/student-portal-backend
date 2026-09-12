@@ -1,10 +1,13 @@
 package com.spb.studentportalbackend.controller.v1;
 
+import com.spb.studentportalbackend.dto.common.request.DeleteRecordRequest;
+import com.spb.studentportalbackend.dto.common.response.DeleteRecordResponse;
 import com.spb.studentportalbackend.dto.user.request.CreateUserRequest;
 import com.spb.studentportalbackend.dto.user.request.UpdateUserRequest;
 import com.spb.studentportalbackend.dto.user.response.CreateUserResponse;
 import com.spb.studentportalbackend.dto.user.response.UpdateUserResponse;
 import com.spb.studentportalbackend.service.user.CreateUserService;
+import com.spb.studentportalbackend.service.user.DeleteUserService;
 import com.spb.studentportalbackend.service.user.UpdateUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     CreateUserService  createUserService;
     UpdateUserService updateUserService;
+    DeleteUserService deleteUserService;
 
     @PostMapping("/create")
     public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
@@ -29,5 +33,10 @@ public class UserController {
     @PatchMapping("/update")
     public ResponseEntity<UpdateUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(updateUserService.update(updateUserRequest));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<DeleteRecordResponse> deleteUser(@RequestBody DeleteRecordRequest deleteUserRequest) {
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deleteUserService.delete(deleteUserRequest));
     }
 }
