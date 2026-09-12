@@ -8,7 +8,9 @@ import com.spb.studentportalbackend.repository.UserSpecification;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -19,7 +21,20 @@ public class ReadUserService {
 
     UserRepository userRepository;
 
-    public List<ReadUserResponse> read(ReadUserRequest request) {
+    public List<ReadUserResponse> readAll() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public ReadUserResponse readById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
+        return toResponse(user);
+    }
+
+    public List<ReadUserResponse> search(ReadUserRequest request) {
         return userRepository.findAll(UserSpecification.fromRequest(request))
                 .stream()
                 .map(this::toResponse)

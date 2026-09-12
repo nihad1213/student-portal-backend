@@ -36,9 +36,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createUserService.create(createUserRequest));
     }
 
-    @PostMapping("/read")
-    public ResponseEntity<List<ReadUserResponse>> readUsers(@RequestBody ReadUserRequest readUserRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(readUserService.read(readUserRequest));
+    @GetMapping("/read")
+    public ResponseEntity<List<ReadUserResponse>> readUsers() {
+        return ResponseEntity.status(HttpStatus.OK).body(readUserService.readAll());
+    }
+
+    @GetMapping("/read/{id}")
+    public ResponseEntity<ReadUserResponse> readUser(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(readUserService.readById(id));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<ReadUserResponse>> searchUsers(@RequestBody ReadUserRequest readUserRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(readUserService.search(readUserRequest));
     }
 
     @PatchMapping("/update")
