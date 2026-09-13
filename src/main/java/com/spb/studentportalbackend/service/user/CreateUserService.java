@@ -8,11 +8,13 @@ import com.spb.studentportalbackend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,9 +25,11 @@ public class CreateUserService {
     public CreateUserResponse create(CreateUserRequest request) {
 
         if (userRepository.existsByUsername(request.getUsername())) {
+            log.warn("Create user rejected: username already taken username={}", request.getUsername());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
         if (userRepository.existsByMail(request.getMail())) {
+            log.warn("Create user rejected: mail already taken mail={}", request.getMail());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Mail already taken");
         }
 
@@ -46,6 +50,7 @@ public class CreateUserService {
         user.setRole(role);
 
         User saved = userRepository.save(user);
+        log.info("User created id={} username={}", saved.getId(), saved.getUsername());
 
         return new CreateUserResponse(
                 saved.getId(),

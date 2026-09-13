@@ -7,11 +7,13 @@ import com.spb.studentportalbackend.security.JwtService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,6 +29,7 @@ public class LoginService {
 
         User user = (User) authentication.getPrincipal();
         String token = jwtService.generateToken(user);
+        log.info("User logged in username={}", user.getUsername());
 
         return new LoginResponse(token);
     }

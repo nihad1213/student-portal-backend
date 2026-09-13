@@ -8,11 +8,13 @@ import com.spb.studentportalbackend.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -23,12 +25,15 @@ public class RegisterService {
 
     public RegisterResponse registerFirstAdmin(RegisterRequest request) {
         if (userRepository.existsByRole(RoleEnum.ADMIN)) {
+            log.warn("Register admin rejected: an admin already exists");
             throw new ResponseStatusException(HttpStatus.CONFLICT, "An admin already exists");
         }
         if (userRepository.existsByUsername(request.getUsername())) {
+            log.warn("Register admin rejected: username already taken username={}", request.getUsername());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already taken");
         }
         if (userRepository.existsByMail(request.getMail())) {
+            log.warn("Register admin rejected: mail already taken mail={}", request.getMail());
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Mail already taken");
         }
 
@@ -42,6 +47,7 @@ public class RegisterService {
         user.setRole(RoleEnum.ADMIN);
 
         User saved = userRepository.save(user);
+        log.info("First admin registered id={} username={}", saved.getId(), saved.getUsername());
 
         return new RegisterResponse(saved.getId(), saved.getUsername(), saved.getMail(), saved.getRole());
     }

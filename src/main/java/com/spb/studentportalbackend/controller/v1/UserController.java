@@ -15,12 +15,14 @@ import com.spb.studentportalbackend.service.user.UpdateUserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -33,31 +35,37 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest createUserRequest) {
+        log.info("POST /user/create username={}", createUserRequest.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(createUserService.create(createUserRequest));
     }
 
     @GetMapping("/read")
     public ResponseEntity<List<ReadUserResponse>> readUsers() {
+        log.debug("GET /user/read");
         return ResponseEntity.status(HttpStatus.OK).body(readUserService.readAll());
     }
 
     @GetMapping("/read/{id}")
     public ResponseEntity<ReadUserResponse> readUser(@PathVariable Long id) {
+        log.debug("GET /user/read/{}", id);
         return ResponseEntity.status(HttpStatus.OK).body(readUserService.readById(id));
     }
 
     @PostMapping("/search")
     public ResponseEntity<List<ReadUserResponse>> searchUsers(@RequestBody ReadUserRequest readUserRequest) {
+        log.debug("POST /user/search criteria={}", readUserRequest);
         return ResponseEntity.status(HttpStatus.OK).body(readUserService.search(readUserRequest));
     }
 
     @PatchMapping("/update")
     public ResponseEntity<UpdateUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest) {
+        log.info("PATCH /user/update id={}", updateUserRequest.getId());
         return ResponseEntity.status(HttpStatus.OK).body(updateUserService.update(updateUserRequest));
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<DeleteRecordResponse> deleteUser(@RequestBody DeleteRecordRequest deleteUserRequest) {
+        log.info("DELETE /user/delete id={}", deleteUserRequest.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deleteUserService.delete(deleteUserRequest));
     }
 }

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Console Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File Appender with Size and Time-Based Rolling Policies -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- Archive log files with historical dates and index numbers -->
+            <fileNamePattern>logs/archived/app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- Each file can grow up to 10MB before a new one is created -->
+            <maxFileSize>10MB</maxFileSize>
+            <!-- Retain up to 30 days of history -->
+            <maxHistory>30</maxHistory>
+            <!-- Total size limit for all logs combined -->
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Your application's own packages: keep verbose logging here only -->
+    <logger name="com.spb.studentportalbackend" level="DEBUG" />
+
+    <!-- Root Logger Configuration -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>
