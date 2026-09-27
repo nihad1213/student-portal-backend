@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0003-create-class-students-table
+      author: nihad
+      changes:
+        - createTable:
+            tableName: class_students
+            columns:
+              - column:
+                  name: class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_class_students_class
+                    referencedTableName: classes
+                    referencedColumnNames: id
+              - column:
+                  name: student_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_class_students_student
+                    referencedTableName: users
+                    referencedColumnNames: id
+        - addPrimaryKey:
+            tableName: class_students
+            columnNames: class_id, student_id
+            constraintName: pk_class_students
