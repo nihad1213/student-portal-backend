@@ -23,5 +23,5 @@ public class CreateCourseClassRequest {
     Integer capacity;
 
     @NotNull(message = "Teacher Id is required")
-    Integer teacherId;
+    Long teacherId;
 }
