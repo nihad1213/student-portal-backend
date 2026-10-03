@@ -49,6 +49,11 @@ public class CreateUserService {
         }
         user.setRole(role);
 
+        if (RoleEnum.STUDENT.equals(role)) {
+            user.setCurrentYear(1);
+            user.setCurrentSemester(1);
+        }
+
         User saved = userRepository.save(user);
         log.info("User created id={} username={}", saved.getId(), saved.getUsername());
 
