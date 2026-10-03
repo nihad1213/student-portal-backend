@@ -36,4 +36,6 @@ public class UpdateUserRequest {
 
     @NotBlank
     String role;
+
+    Boolean frozen;
 }

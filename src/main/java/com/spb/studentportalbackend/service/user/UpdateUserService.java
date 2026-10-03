@@ -23,7 +23,7 @@ public class UpdateUserService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
 
-    public UpdateUserResponse update(UpdateUserRequest  request) {
+    public UpdateUserResponse update(UpdateUserRequest request) {
         User user = userRepository.findById(request.getId())
                 .orElseThrow(() -> {
                     log.warn("Update user rejected: not found id={}", request.getId());
@@ -48,7 +48,6 @@ public class UpdateUserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         RoleEnum role;
-
         try {
             role = RoleEnum.valueOf(request.getRole().toUpperCase());
         } catch (IllegalArgumentException e) {
@@ -56,6 +55,12 @@ public class UpdateUserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role: " + request.getRole());
         }
         user.setRole(role);
+
+        if (RoleEnum.STUDENT.equals(role)) {
+            if (request.getFrozen() != null) {
+                user.setFrozen(request.getFrozen());
+            }
+        }
 
         User saved = userRepository.save(user);
         log.info("User updated id={}", saved.getId());
