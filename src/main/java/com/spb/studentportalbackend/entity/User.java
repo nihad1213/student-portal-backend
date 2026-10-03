@@ -36,6 +36,12 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "phone_number", nullable = false, unique = true)
     String phoneNumber;
 
+    @Column(name = "current_year")
+    Integer currentYear;
+
+    @Column(name = "current_semester")
+    Integer currentSemester;
+
     @Column(name = "mail", nullable = false, unique = true)
     String mail;
 

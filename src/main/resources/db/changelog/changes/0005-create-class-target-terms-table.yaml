@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0005-create-class-target-terms-table
+      author: nihad
+      changes:
+        - createTable:
+            tableName: class_target_terms
+            columns:
+              - column:
+                  name: class_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_class_terms_class
+                    referencedTableName: classes
+                    referencedColumnNames: id
+              - column:
+                  name: target_year
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: target_semester
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: class_target_terms
+            columnNames: class_id, target_year, target_semester
+            constraintName: pk_class_target_terms

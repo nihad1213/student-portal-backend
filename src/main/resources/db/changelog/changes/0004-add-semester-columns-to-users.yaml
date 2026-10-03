@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0004-add-semester-columns-to-users
+      author: nihad
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: current_year
+                  type: INT
+              - column:
+                  name: current_semester
+                  type: INT

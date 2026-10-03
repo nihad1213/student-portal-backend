@@ -33,6 +33,13 @@ public class CourseClass extends BaseEntity{
     @JoinColumn(name = "teacher_id", nullable = false)
     User teacher;
 
+    @ElementCollection
+    @CollectionTable(
+            name = "class_target_terms",
+            joinColumns = @JoinColumn(name = "class_id")
+    )
+    Set<AcademicTerm> targetTerms = new HashSet<>();
+
     @ManyToMany
     @JoinTable(
             name = "class_students",
