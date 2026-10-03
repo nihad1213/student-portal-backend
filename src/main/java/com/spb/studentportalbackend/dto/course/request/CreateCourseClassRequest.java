@@ -2,11 +2,14 @@ package com.spb.studentportalbackend.dto.course.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,4 +27,7 @@ public class CreateCourseClassRequest {
 
     @NotNull(message = "Teacher Id is required")
     Long teacherId;
+
+    @NotEmpty
+    List<AcademicTermDto> targetTerms;
 }

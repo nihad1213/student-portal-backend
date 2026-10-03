@@ -1,8 +1,10 @@
 package com.spb.studentportalbackend.service.course;
 
 import com.spb.studentportalbackend.common.RoleEnum;
+import com.spb.studentportalbackend.dto.course.request.AcademicTermDto;
 import com.spb.studentportalbackend.dto.course.request.UpdateCourseClassRequest;
 import com.spb.studentportalbackend.dto.course.response.UpdateCourseClassResponse;
+import com.spb.studentportalbackend.entity.AcademicTerm;
 import com.spb.studentportalbackend.entity.CourseClass;
 import com.spb.studentportalbackend.entity.User;
 import com.spb.studentportalbackend.repository.CourseClassRepository;
@@ -15,6 +17,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -63,10 +69,23 @@ public class UpdateCourseClassService {
         courseClass.setMaxCapacity(request.getMaxCapacity());
         courseClass.setTeacher(teacher);
 
+        if (request.getTargetTerms() != null) {
+            Set<AcademicTerm> updatedTerms = request.getTargetTerms().stream()
+                    .map(dto -> new AcademicTerm(dto.getTargetYear(), dto.getTargetSemester()))
+                    .collect(Collectors.toSet());
+
+            courseClass.getTargetTerms().clear();
+            courseClass.getTargetTerms().addAll(updatedTerms);
+        }
+
         CourseClass updated = courseClassRepository.save(courseClass);
         log.info("Class updated id={} classCode={}", updated.getId(), updated.getClassCode());
 
         String teacherFullName = teacher.getFirstName() + " " + teacher.getLastName();
+
+        List<AcademicTermDto> responseTerms = updated.getTargetTerms().stream()
+                .map(term -> new AcademicTermDto(term.getTargetYear(), term.getTargetSemester()))
+                .toList();
 
         return new UpdateCourseClassResponse(
                 updated.getId(),
@@ -75,7 +94,8 @@ public class UpdateCourseClassService {
                 updated.getMaxCapacity(),
                 updated.getEnrolledCount(),
                 teacher.getId(),
-                teacherFullName
+                teacherFullName,
+                responseTerms
         );
     }
 }

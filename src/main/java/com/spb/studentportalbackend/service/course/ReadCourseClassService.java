@@ -1,5 +1,6 @@
 package com.spb.studentportalbackend.service.course;
 
+import com.spb.studentportalbackend.dto.course.request.AcademicTermDto;
 import com.spb.studentportalbackend.dto.course.request.ReadCourseClassRequest;
 import com.spb.studentportalbackend.dto.course.response.ReadCourseClassResponse;
 import com.spb.studentportalbackend.entity.CourseClass;
@@ -58,6 +59,12 @@ public class ReadCourseClassService {
 
         Long teacherId = courseClass.getTeacher() != null ? courseClass.getTeacher().getId() : null;
 
+        List<AcademicTermDto> targetTerms = courseClass.getTargetTerms() != null
+                ? courseClass.getTargetTerms().stream()
+                .map(term -> new AcademicTermDto(term.getTargetYear(), term.getTargetSemester()))
+                .toList()
+                : List.of();
+
         return new ReadCourseClassResponse(
                 courseClass.getId(),
                 courseClass.getClassName(),
@@ -66,7 +73,8 @@ public class ReadCourseClassService {
                 courseClass.getEnrolledCount(),
                 teacherId,
                 teacherFullName,
-                courseClass.isFull()
+                courseClass.isFull(),
+                targetTerms
         );
     }
 }
