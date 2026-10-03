@@ -42,6 +42,12 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "current_semester")
     Integer currentSemester;
 
+    @Column(name = "is_frozen", nullable = false)
+    boolean frozen = false;
+
+    @Column(name = "is_graduated", nullable = false)
+    boolean graduated = false;
+
     @Column(name = "mail", nullable = false, unique = true)
     String mail;
 
