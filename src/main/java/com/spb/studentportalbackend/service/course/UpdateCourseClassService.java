@@ -9,6 +9,7 @@ import com.spb.studentportalbackend.entity.CourseClass;
 import com.spb.studentportalbackend.entity.User;
 import com.spb.studentportalbackend.repository.CourseClassRepository;
 import com.spb.studentportalbackend.repository.UserRepository;
+import com.spb.studentportalbackend.service.enrollment.ClassSeatRedisService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -30,6 +33,9 @@ public class UpdateCourseClassService {
 
     CourseClassRepository courseClassRepository;
     UserRepository userRepository;
+    CourseClassRepository courseClassRepository;
+    UserRepository userRepository;
+    ClassSeatRedisService classSeatRedisService;
 
     @Transactional
     public UpdateCourseClassResponse update(UpdateCourseClassRequest request) {
@@ -86,6 +92,14 @@ public class UpdateCourseClassService {
         List<AcademicTermDto> responseTerms = updated.getTargetTerms().stream()
                 .map(term -> new AcademicTermDto(term.getTargetYear(), term.getTargetSemester()))
                 .toList();
+
+        Long classId = updated.getId();
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                classSeatRedisService.evict(classId);
+            }
+        });
 
         return new UpdateCourseClassResponse(
                 updated.getId(),

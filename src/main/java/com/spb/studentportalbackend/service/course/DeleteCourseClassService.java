@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ import java.time.LocalDateTime;
 public class DeleteCourseClassService {
 
     CourseClassRepository courseClassRepository;
+    ClassSeatRedisService classSeatRedisService;
 
     @Transactional
     public DeleteRecordResponse delete(DeleteRecordRequest request) {
@@ -38,6 +41,14 @@ public class DeleteCourseClassService {
         }
 
         courseClass.setDeletedAt(LocalDateTime.now());
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                classSeatRedisService.evict(request.getId());
+            }
+        });
+
         courseClassRepository.save(courseClass);
         log.info("Class deleted id={}", request.getId());
 
